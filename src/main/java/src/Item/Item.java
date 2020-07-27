@@ -4,13 +4,13 @@ public class Item {
     private String name;
     private double price;
     private String type;
-    private String date;
+    private String expirationDate;
 
     public Item(ItemDetail detail) {
         name = detail.name;
         price = detail.price;
         type = detail.type;
-        date = detail.date;
+        expirationDate = detail.expirationDate;
     }
 
     public String getName() {
@@ -37,15 +37,15 @@ public class Item {
         this.type = type;
     }
 
-    public String getDate() {
-        return date;
+    public String getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public String toString() {
-        return "name: " + getName() + " price: " + getPrice() + " type: " + getType() + " date: " + getDate();
+        return "name: " + getName() + " price: " + getPrice() + " type: " + getType() + " date: " + getExpirationDate();
     }
 }

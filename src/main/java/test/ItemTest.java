@@ -84,10 +84,10 @@ public class ItemTest {
     }
 
     @Test
-    public void getDateTest() {
+    public void getExpirationDateTest() {
         String expected = "0/00/0000";
 
-        String actual = item.getDate();
+        String actual = item.getExpirationDate();
 
         Assert.assertEquals(expected, actual);
     }
@@ -96,8 +96,8 @@ public class ItemTest {
     public void setDateTest() {
         String expected = "12/15/2015";
 
-        item.setDate("12/15/2015");
-        String actual = item.getDate();
+        item.setExpirationDate("12/15/2015");
+        String actual = item.getExpirationDate();
 
         Assert.assertEquals(expected, actual);
     }
