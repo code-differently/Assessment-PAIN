@@ -11,7 +11,7 @@ public class JerkSONDataParser {
         String formatted=input.replaceAll("##","\n");
         formatted=formatted.replaceAll("[;^]",",");
         formatted=formatted.replaceAll("[^\\w\\n,./:]",":");
-        formatted=formatted.replaceAll("[:,]expiration.+",",expiration");
+        formatted=formatted.replaceAll("[:]expiration",",expiration");
         return formatted;
     }
 
