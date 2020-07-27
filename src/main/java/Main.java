@@ -11,6 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         String output = (new Main()).readRawDataToString();
+        //theoretically if I had enough time I would be able to write the main 
         System.out.println(output);
 
     }
