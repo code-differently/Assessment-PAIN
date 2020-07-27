@@ -1,17 +1,18 @@
-import org.apache.commons.io.IOUtils;
-import java.io.IOException;
-
 public class Main {
 
-    public String readRawDataToString() throws Exception{
-        ClassLoader classLoader = getClass().getClassLoader();
-        String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
-        return result;
-    }
 
     public static void main(String[] args) throws Exception{
-        String output = (new Main()).readRawDataToString();
-        System.out.println(output);
+        ReadFile reader = new ReadFile();
+        System.out.println(reader.getData());
+        System.out.println("\n" + reader.getSubStrings());
+        System.out.println(reader.getErrCount());
+        reader.fixMissSpells();
+        System.out.println(reader.getSubStrings());
+        reader.createNameList();
 
     }
+
+
+
+
 }
