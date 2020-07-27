@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Main {
+    //#THANKS OBAMA
+    //#MakeTheTestLessDifficultAgain
 
     public static String[] words(String paragraph) {
         HashMap<String, Integer> output = new HashMap<String,Integer>();
