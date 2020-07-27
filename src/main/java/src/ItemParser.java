@@ -1,13 +1,11 @@
-package src.App;
+package src;
 
 import org.apache.commons.io.IOUtils;
-import src.Item.Item;
-import src.Item.ItemDetail;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
-public class Application {
+public class ItemParser {
 
     public String readRawDataToString() throws Exception{
         ClassLoader classLoader = getClass().getClassLoader();
@@ -18,6 +16,7 @@ public class Application {
     private int numExceptions = 0;
     private TreeMap<String, Integer> occurrences = new TreeMap<>();
     private HashMap<String, TreeMap<Double, Integer>> prices = new HashMap<>();
+    private static final Logger myLogger = Logger.getLogger("src.app");
 
     public static void main(String[] args) throws Exception{
         List<Item> listOfItems = new ArrayList<Item>();
@@ -26,11 +25,11 @@ public class Application {
         String type = "type:";
         String expiration = "expiration:";
 
-        Application app = new Application();
-        app.prices.put("apples", new TreeMap<Double, Integer>());
-        app.prices.put("bread", new TreeMap<Double, Integer>());
-        app.prices.put("cookies", new TreeMap<Double, Integer>());
-        app.prices.put("milk", new TreeMap<Double, Integer>());
+        ItemParser app = new ItemParser();
+        app.prices.put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        app.prices.put("bread", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        app.prices.put("cookies", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        app.prices.put("milk", new TreeMap<Double, Integer>(Collections.reverseOrder()));
 
         String output = app.readRawDataToString();
 
@@ -73,11 +72,7 @@ public class Application {
             listOfItems.add(groceryItem);
         }
 
-//        for(Item item: listOfItems) {
-//            System.out.println(item.toString());
-//        }
-
-        System.out.println(app.endResults());
+        myLogger.info(app.endResults());
     }
 
     public String getSpecificItem(String item, int indexOfDetail) {
@@ -132,7 +127,6 @@ public class Application {
         occurrences.forEach((grocery, numTimesOfGrocery) -> {
             switch(grocery) {
                 case "":
-                    result.append("Nothing occured " + numTimesOfGrocery + " times.\n");
                     break;
                 default:
                     grocery = Character.toUpperCase(grocery.charAt(0)) + grocery.substring(1);

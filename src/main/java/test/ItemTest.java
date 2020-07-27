@@ -3,8 +3,8 @@ package test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import src.Item.Item;
-import src.Item.ItemDetail;
+import src.Item;
+import src.ItemDetail;
 
 public class ItemTest {
     private Item item;

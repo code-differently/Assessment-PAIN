@@ -1,4 +1,4 @@
-package src.Item;
+package src;
 
 public class ItemDetail {
     public String name = "nothing";
