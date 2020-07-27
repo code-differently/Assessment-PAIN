@@ -1,5 +1,9 @@
 import org.apache.commons.io.IOUtils;
-import java.io.IOException;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class Main {
 
@@ -13,5 +17,15 @@ public class Main {
         String output = (new Main()).readRawDataToString();
         System.out.println(output);
 
+    }
+
+    public static HashMap groceries(String groceryList) throws Exception {
+        HashMap<String, Double> grocery = new HashMap<String, Double>();
+        String[] kVPair = (new Main()).readRawDataToString().split(":");
+
+        for (String item: kVPair) {
+            String[] list = item.split(":");
+            grocery.put("/([:])\w+/gi",(?=[0-9.0-9]));
+        }
     }
 }
