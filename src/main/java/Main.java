@@ -14,4 +14,15 @@ public class Main {
         System.out.println(output);
 
     }
+
+    public String JerkSON(String jSON){
+
+        String parsed =jSON.replaceAll("##","\n");
+        parsed = parsed.replaceAll("[;^]",",");
+        parsed = parsed.replaceAll("[^\\w\\n,./:]",":");
+        parsed = parsed.replaceAll("[:]expiration",",expiration");
+
+        return parsed;
+    }
+
 }
