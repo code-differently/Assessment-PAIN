@@ -25,46 +25,46 @@ public class ItemParser {
         String type = "type:";
         String expiration = "expiration:";
 
-        ItemParser app = new ItemParser();
-        app.prices.put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        app.prices.put("bread", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        app.prices.put("cookies", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        app.prices.put("milk", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        ItemParser parser = new ItemParser();
+        parser.prices.put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        parser.prices.put("bread", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        parser.prices.put("cookies", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        parser.prices.put("milk", new TreeMap<Double, Integer>(Collections.reverseOrder()));
 
-        String output = app.readRawDataToString();
+        String output = parser.readRawDataToString();
 
-        String[] linesOfOutput = app.formatStringAndPutIntoLines(output);
+        String[] linesOfOutput = parser.formatStringAndPutIntoLines(output);
 
         for(String item: linesOfOutput) {
-            int indexOfName = app.calculateIndex(item, name);
-            int indexOfPrice = app.calculateIndex(item, price);
-            int indexOfType = app.calculateIndex(item, type);
-            int indexOfExpiration = app.calculateIndex(item, expiration);
+            int indexOfName = parser.calculateIndex(item, name);
+            int indexOfPrice = parser.calculateIndex(item, price);
+            int indexOfType = parser.calculateIndex(item, type);
+            int indexOfExpiration = parser.calculateIndex(item, expiration);
 
             ItemDetail detail = new ItemDetail();
-            String potentialName = app.getSpecificItem(item, indexOfName);
+            String potentialName = parser.getSpecificItem(item, indexOfName);
             if(potentialName.length() > 0 && potentialName.substring(0, 1).equals("c")) {
                 potentialName = potentialName.replaceAll("0", "o");
             }
             detail.name = potentialName;
-            app.occurrences.merge(potentialName, 1, Integer::sum);
-            String priceString = app.getSpecificItem(item, indexOfPrice);
-            detail.price = app.setPrice(priceString);
-            detail.type = app.getSpecificItem(item, indexOfType);
-            detail.expirationDate = app.getSpecificItem(item, indexOfExpiration);
+            parser.occurrences.merge(potentialName, 1, Integer::sum);
+            String priceString = parser.getSpecificItem(item, indexOfPrice);
+            detail.price = parser.setPrice(priceString);
+            detail.type = parser.getSpecificItem(item, indexOfType);
+            detail.expirationDate = parser.getSpecificItem(item, indexOfExpiration);
 
             switch(potentialName) {
                 case "apples":
-                    app.prices.get("apples").merge(detail.price, 1, Integer::sum);
+                    parser.prices.get("apples").merge(detail.price, 1, Integer::sum);
                     break;
                 case "bread":
-                    app.prices.get("bread").merge(detail.price, 1, Integer::sum);
+                    parser.prices.get("bread").merge(detail.price, 1, Integer::sum);
                     break;
                 case "cookies":
-                    app.prices.get("cookies").merge(detail.price, 1, Integer::sum);
+                    parser.prices.get("cookies").merge(detail.price, 1, Integer::sum);
                     break;
                 case "milk":
-                    app.prices.get("milk").merge(detail.price, 1, Integer::sum);
+                    parser.prices.get("milk").merge(detail.price, 1, Integer::sum);
                     break;
             }
 
@@ -72,7 +72,7 @@ public class ItemParser {
             listOfItems.add(groceryItem);
         }
 
-        myLogger.info(app.endResults());
+        myLogger.info(parser.endResults());
     }
 
     public String getSpecificItem(String item, int indexOfDetail) {
