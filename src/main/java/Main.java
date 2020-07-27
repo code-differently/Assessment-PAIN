@@ -11,7 +11,26 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         String output = (new Main()).readRawDataToString();
-        System.out.println(output);
+        JerkSONParser jsp = new JerkSONParser(output);
+
+        jsp.parseInputForEntries();
+        jsp.getEntries();
+
+        System.out.println();
+
+        jsp.parseEntriesForNamePrice();
+        jsp.getNamePrice();
+
+        System.out.println();
+
+        jsp.countExceptions();
+
+        System.out.println();
+
+        jsp.countOccurrencesOfFood();
+
+        jsp.createFood();
+        System.out.println(jsp.getOutput());
 
     }
 }
