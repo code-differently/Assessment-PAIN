@@ -40,7 +40,7 @@ public class Main
             String price = lineInUse.substring(lineInUse.indexOf(",") + 1);
 
             name = name.substring(name.indexOf(":") + 1);
-            name = replaceDemLetters(name);
+            name = new Main().replaceDemLetters(name);
             price = price.substring(price.indexOf(":")+1);
 
 
@@ -67,7 +67,7 @@ public class Main
         System.out.println(format(hashy) +  countErrors + " errors seen");
     }
 
-    public static String replaceDemLetters(String in)
+    public String replaceDemLetters(String in)
     {
         //had to look up regex for finding certain strings within a string
         if(in.matches(".*[\\d].*"))
