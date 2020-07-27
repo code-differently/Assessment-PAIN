@@ -16,7 +16,7 @@ public class JerkSONDataParser {
     }
 
     /**
-     * @param input A string in parsed in JSON to be turned into a HashMap
+     * @param input A string parsed in JSON
      * @return A string displaying the occurences of the products and errors
      */
     static String getOccurences(String input) {
@@ -62,7 +62,7 @@ public class JerkSONDataParser {
      * @param input Replaces incorrect spelling that uses numbers
      * @return A string with correct letters
      */
-    private static String spellCheck(String input){
+    static String spellCheck(String input){
         String formatted=input;
         if(formatted.matches(".*[\\d].*")) {
             formatted = formatted.replaceAll("0", "o");
@@ -72,10 +72,10 @@ public class JerkSONDataParser {
     }
 
     /**
-     * @param products A HashMap that has been formatted correctly, name:{prices{price:count}}
-     * @return A string displaying the occurences of the products and errors
+     * @param products A HashMap that has been formatted correctly
+     * @return A string displaying the occurences of the products
      */
-    private static String formatOccurences(HashMap<String,HashMap<Double, Integer>> products){
+    static String formatOccurences(HashMap<String,HashMap<Double, Integer>> products){
         StringBuilder output=new StringBuilder();
         for (Map.Entry <String,HashMap<Double,Integer>> entry:
              products.entrySet()) {
