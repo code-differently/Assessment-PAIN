@@ -1,5 +1,8 @@
 import org.apache.commons.io.IOUtils;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -13,5 +16,13 @@ public class Main {
         String output = (new Main()).readRawDataToString();
         System.out.println(output);
 
+        String groceryList [] = output.split("##");
+        List<String>groceryList2 = new ArrayList<String>();
+        groceryList2 = Arrays.asList(groceryList);
+        for (String s: groceryList2){
+            System.out.println(s); 
+        }
+
+        
     }
 }
