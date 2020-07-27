@@ -1,5 +1,6 @@
 import org.apache.commons.io.IOUtils;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Main {
 
@@ -10,8 +11,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception{
+        JerkSonparser jerkSonparser = new JerkSonparser();
         String output = (new Main()).readRawDataToString();
-        System.out.println(output);
+        String parsed = jerkSonparser.parser(output);
+        String checked = jerkSonparser.checkCommas(parsed);
+        HashMap<String,String> hashMap = jerkSonparser.mapping(checked);
+        System.out.println(hashMap);
 
     }
 }
