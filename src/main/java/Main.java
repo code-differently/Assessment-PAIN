@@ -1,5 +1,7 @@
 import org.apache.commons.io.IOUtils;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -12,6 +14,10 @@ public class Main {
     public static void main(String[] args) throws Exception{
         String output = (new Main()).readRawDataToString();
         System.out.println(output);
-
+        List<Item> listOfItems = new ArrayList<Item>();
+        String name = "name:";
+        String price = "price:";
+        String type = "type:";
+        String expiration = "expiration:";
     }
 }
