@@ -16,8 +16,8 @@ public class JerkSONDataParser {
     }
 
     /**
-     * @param input A string parsed in JSON
-     * @return A string displaying the occurences of the products and errors
+     * @param input A string parsed in JSON that will fix spelling errors if needed
+     * @return A string displaying the occurences of valid products and errors
      */
     static String getOccurences(String input) {
         HashMap<String, HashMap<Double, Integer>> products = new HashMap<String, HashMap<Double, Integer>>();
@@ -73,7 +73,7 @@ public class JerkSONDataParser {
 
     /**
      * @param products A HashMap that has been formatted correctly
-     * @return A string displaying the occurences of the products
+     * @return A string displaying the occurences of valid products
      */
     static String formatOccurences(HashMap<String,HashMap<Double, Integer>> products){
         StringBuilder output=new StringBuilder();
