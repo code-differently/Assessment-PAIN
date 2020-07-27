@@ -47,8 +47,8 @@ public class Parser {
         }
     }
 
-    public void getStr(){
-        System.out.println(str);
+    public String getStr(){
+        return str;
     }
 
     public String createMap(){
@@ -73,7 +73,7 @@ public class Parser {
         for (int i = 0; i < arr.length-1; i++){
             mapValues+=arr[i] + " (Seen " + map.get(arr[i]) + ")\n";
         }
-        mapValues += "Errors: " + error + "\n";
+        mapValues += "Errors: " + error;
         return mapValues;
     }
 /*
