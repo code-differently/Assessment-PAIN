@@ -30,10 +30,11 @@ public class Main {
     public String readRawDataToString() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
-
-
-
-
+        result = result.replaceAll("0", "o");
+        result = result.replaceAll("3", "e");
+        result = result.replaceAll("4","a");
+        result = result.replaceAll("8", "b");
+        result = result.replaceAll("6", "g");
         result = result.toLowerCase();
         result = result.replaceAll("##", ",");
         result = result.replaceAll(";;", ";");
