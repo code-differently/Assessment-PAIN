@@ -44,6 +44,7 @@ public class ItemParser {
                 potentialName = potentialName.replaceAll("0", "o");
             }
             parser.occurrences.merge(potentialName, 1, Integer::sum);
+            
             detail.name = potentialName;
             String priceString = parser.getSpecificItem(item, indexOfPrice);
             detail.price = parser.setPrice(priceString);
