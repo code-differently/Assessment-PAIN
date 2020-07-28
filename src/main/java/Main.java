@@ -15,20 +15,8 @@ public class Main {
         return result;
     }
 
-    public String parseData(){
-        String[] lines = result.split("##");
-
-        int i = 0;
-        while(lines.length <= i){
-            String currentLine = lines[i];
-            p = Pattern.compile("/name:/gi");
-            m = p.matcher(currentLine);
-
-            while(m.find()){
-                p = Pattern.compile("(?<=name:+)", i);
-            }
-        }
-        return "";
+    public String getData(){
+        return result;
     }
 
     public static void main(String[] args) throws Exception{
