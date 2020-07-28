@@ -26,6 +26,7 @@ public class ItemParser {
         String expiration = "expiration:";
 
         ItemParser parser = new ItemParser();
+        //price is sorted in descending order
         parser.prices.put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
         parser.prices.put("bread", new TreeMap<Double, Integer>(Collections.reverseOrder()));
         parser.prices.put("cookies", new TreeMap<Double, Integer>(Collections.reverseOrder()));
@@ -43,6 +44,7 @@ public class ItemParser {
 
             ItemDetail detail = new ItemDetail();
             String potentialName = parser.getSpecificItem(item, indexOfName);
+            //cookies seemed to be the only different word
             if(potentialName.length() > 0 && potentialName.substring(0, 1).equals("c")) {
                 potentialName = potentialName.replaceAll("0", "o");
             }
@@ -53,26 +55,20 @@ public class ItemParser {
             detail.type = parser.getSpecificItem(item, indexOfType);
             detail.expirationDate = parser.getSpecificItem(item, indexOfExpiration);
 
-            switch(potentialName) {
-                case "apples":
-                    parser.prices.get("apples").merge(detail.price, 1, Integer::sum);
-                    break;
-                case "bread":
-                    parser.prices.get("bread").merge(detail.price, 1, Integer::sum);
-                    break;
-                case "cookies":
-                    parser.prices.get("cookies").merge(detail.price, 1, Integer::sum);
-                    break;
-                case "milk":
-                    parser.prices.get("milk").merge(detail.price, 1, Integer::sum);
-                    break;
-            }
+            parser.setPriceOccurrenceOfItem(potentialName, detail.price);
 
             Item groceryItem = new Item(detail);
             listOfItems.add(groceryItem);
         }
 
         myLogger.info(parser.endResults());
+    }
+
+    public void setPriceOccurrenceOfItem(String itemName, double price) {
+        String noName = "";
+        if(!itemName.equals(noName)) {
+            prices.get(itemName).merge(price, 1, Integer::sum);
+        }
     }
 
     public String getSpecificItem(String item, int indexOfDetail) {
@@ -132,12 +128,12 @@ public class ItemParser {
                     break;
                 default:
                     grocery = Character.toUpperCase(grocery.charAt(0)) + grocery.substring(1);
-                    result.append(grocery + " occured " + numTimesOfGrocery + " times.\n");
+                    result.append(grocery + " occurred " + numTimesOfGrocery + " times.\n");
                     result.append("==========================\n");
                     grocery = grocery.toLowerCase();
-                    prices.get(grocery).forEach((groceryPrice, numOccurancesOfPrice) -> {
+                    prices.get(grocery).forEach((groceryPrice, numOccurencesOfPrice) -> {
                         if(groceryPrice != 0.0) {
-                            result.append("Price: " + groceryPrice + " seen: " + numOccurancesOfPrice + " times.\n");
+                            result.append("Price: " + groceryPrice + " seen: " + numOccurencesOfPrice + " times.\n");
                             result.append("--------------------------\n");
                         }
                     });
@@ -146,5 +142,9 @@ public class ItemParser {
         });
         result.append("Number of exceptions is: " + numExceptions);
         return result.toString();
+    }
+
+    public HashMap<String, TreeMap<Double, Integer>> getPrices() {
+        return this.prices;
     }
 }

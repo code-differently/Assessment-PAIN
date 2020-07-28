@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import src.ItemParser;
 
+import java.util.Collections;
+import java.util.TreeMap;
+
 public class ItemParserTest {
     private ItemParser itemParser;
     private final double DELTA = 0.0;
@@ -84,5 +87,16 @@ public class ItemParserTest {
         String actual = itemParser.endResults();
 
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void setPriceOccurrenceOfItem() {
+        int expectedOccurrences = 1;
+
+        itemParser.getPrices().put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
+        itemParser.setPriceOccurrenceOfItem("apples", 13.5);
+        int actualOccurrences = itemParser.getPrices().get("apples").get(13.5);
+
+        Assert.assertEquals(expectedOccurrences, actualOccurrences);
     }
 }
