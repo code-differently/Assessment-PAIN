@@ -26,11 +26,6 @@ public class ItemParser {
         String expiration = "expiration:";
 
         ItemParser parser = new ItemParser();
-        //price is sorted in descending order
-        parser.prices.put("apples", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        parser.prices.put("bread", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        parser.prices.put("cookies", new TreeMap<Double, Integer>(Collections.reverseOrder()));
-        parser.prices.put("milk", new TreeMap<Double, Integer>(Collections.reverseOrder()));
 
         String output = parser.readRawDataToString();
 
@@ -48,8 +43,8 @@ public class ItemParser {
             if(potentialName.length() > 0 && potentialName.substring(0, 1).equals("c")) {
                 potentialName = potentialName.replaceAll("0", "o");
             }
-            detail.name = potentialName;
             parser.occurrences.merge(potentialName, 1, Integer::sum);
+            detail.name = potentialName;
             String priceString = parser.getSpecificItem(item, indexOfPrice);
             detail.price = parser.setPrice(priceString);
             detail.type = parser.getSpecificItem(item, indexOfType);
@@ -67,6 +62,10 @@ public class ItemParser {
     public void setPriceOccurrenceOfItem(String itemName, double price) {
         String noName = "";
         if(!itemName.equals(noName)) {
+            if(!prices.containsKey(itemName)) {
+                //price is sorted in descending order
+                prices.put(itemName, new TreeMap<Double, Integer>(Collections.reverseOrder()));
+            }
             prices.get(itemName).merge(price, 1, Integer::sum);
         }
     }
