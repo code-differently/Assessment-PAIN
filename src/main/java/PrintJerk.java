@@ -32,11 +32,8 @@ private void getGroceries()
     for (int i = 0; i < parse.length;i++)
     {
 
-        Food food = createFoodFromString(parse[i]);
-        if (food != null)
-        {
-            foods.add(food);
-        }
+        createFoodFromString(parse[i]);
+
 
     }
 }
@@ -49,6 +46,7 @@ public Food createFoodFromString(String input)
     {
        food.setFoodName(parse[1].toLowerCase().replaceAll("0", "o")); 
        food.setFoodPrice(Double.parseDouble(parse[3]));
+       foods.add(food);
     }
 
     return food;
