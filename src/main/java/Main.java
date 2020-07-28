@@ -16,7 +16,7 @@ public class Main
         //System.out.println(output);
         PrintJerk print = new PrintJerk();
         print.setFile("RawData.txt");
-        print.printJerk();
+        print.printGroceries();
 
     }
 
