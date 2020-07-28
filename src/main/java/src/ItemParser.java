@@ -79,7 +79,7 @@ public class ItemParser {
         int endIndexOfDetail = item.indexOf(':', indexOfDetail);
         int endOfLine = -1;
         String specificItem = "";
-        boolean doNotSkip = true;
+        boolean thereIsAValue = true;
         if(endIndexOfDetail != endOfLine) {
             String potentialWord = item.substring(indexOfDetail, endIndexOfDetail);
             switch(potentialWord) {
@@ -87,16 +87,18 @@ public class ItemParser {
                 case "price":
                 case "type":
                 case "expiration":
-                    doNotSkip = false;
+                    thereIsAValue = false;
                     break;
                 default:
                     specificItem = item.substring(indexOfDetail, endIndexOfDetail);
                     break;
             }
         }
-        else if(doNotSkip){
+        //there is a value and it is at the end of the line
+        else if(thereIsAValue){
             specificItem = item.substring(indexOfDetail);
         }
+        //specific item was not populated
         if(specificItem.equals("")) {
             numExceptions++;
         }
