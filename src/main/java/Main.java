@@ -12,16 +12,17 @@ public class Main {
     // BACKGROUND: didnt get far because of spending so much time figuring
     // out the logic for this assessment... kept running into dead ends/holes
     // in my pseudocode
-    public String readRawDataToString() throws Exception{
-        ClassLoader classLoader = getClass().getClassLoader();
-        String result = IOUtils.toString(classLoader.getResourceAsStream("testf.txt"));
-        String[] arr = result.split("##");
-        for (String item : arr){
-            for (int idx = 0; idx < item.length(); idx++){
-
-            }
-        }
-        return result;
+    public static String readRawDataToString() /*throws Exception*/{
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        String result = IOUtils.toString(classLoader.getResourceAsStream("testf.txt"));
+//        String[] arr = result.split("##");
+//        for (String item : arr){
+//            for (int idx = 0; idx < item.length(); idx++){
+//
+//            }
+//        }
+//        return result;
+        return null;
     }
 
     public static void main(String[] args) throws Exception{
