@@ -11,36 +11,32 @@ public class ItemParser {
     private TreeMap<String, Integer> occurrences = new TreeMap<>();
     private HashMap<String, TreeMap<Double, Integer>> prices = new HashMap<>();
     private static final Logger myLogger = Logger.getLogger("src.app");
+    private static ItemDetail detail = new ItemDetail();
+    private static ItemParser parser = new ItemParser();
     private static IndexOfDifferentItems indexes = new IndexOfDifferentItems();
 
     public static void main(String[] args) throws Exception{
         List<Item> listOfItems = new ArrayList<Item>();
-        ItemParser parser = new ItemParser();
+
         String output = parser.readRawDataToString();
         String[] linesOfOutput = parser.formatStringAndPutIntoLines(output);
+        parser.createGroceryList(linesOfOutput, listOfItems);
 
+        myLogger.info(parser.endResults());
+    }
+
+    public void createGroceryList(String[] linesOfOutput, List<Item> listOfItems) {
         for(String item: linesOfOutput) {
             indexes.populateIndexes(item);
 
-            ItemDetail detail = new ItemDetail();
-            String potentialName = parser.getSpecificItem(item, indexes.getIndexOfName());
-            potentialName = parser.replaceMisspellingInCookies(potentialName);
+            parser.populateDetail(item);
+            parser.occurrences.merge(detail.name, 1, Integer::sum);
 
-            parser.occurrences.merge(potentialName, 1, Integer::sum);
-
-            detail.name = potentialName;
-            String priceString = parser.getSpecificItem(item, indexes.getIndexOfPrice());
-            detail.price = parser.setPrice(priceString);
-            detail.type = parser.getSpecificItem(item, indexes.getIndexOfType());
-            detail.expirationDate = parser.getSpecificItem(item, indexes.getIndexOfExpiration());
-
-            parser.setPriceOccurrenceOfItem(potentialName, detail.price);
+            parser.setPriceOccurrenceOfItem(detail.name, detail.price);
 
             Item groceryItem = new Item(detail);
             listOfItems.add(groceryItem);
         }
-
-        myLogger.info(parser.endResults());
     }
 
     public String readRawDataToString() throws Exception{
@@ -49,8 +45,13 @@ public class ItemParser {
         return result;
     }
 
-    private void populateDetail(ItemDetail detail) {
-
+    public void populateDetail(String item) {
+        String potentialName = parser.getSpecificItem(item, indexes.getIndexOfName());
+        detail.name =  parser.replaceMisspellingInCookies(potentialName);;
+        String priceString = parser.getSpecificItem(item, indexes.getIndexOfPrice());
+        detail.price = parser.setPrice(priceString);
+        detail.type = parser.getSpecificItem(item, indexes.getIndexOfType());
+        detail.expirationDate = parser.getSpecificItem(item, indexes.getIndexOfExpiration());
     }
 
     //cookies seemed to be the only different word
@@ -75,32 +76,24 @@ public class ItemParser {
     public String getSpecificItem(String item, int indexOfDetail) {
         int endIndexOfDetail = item.indexOf(':', indexOfDetail);
         int endOfLine = -1;
-        String specificItem = "";
-        boolean thereIsAValue = true;
-        if(endIndexOfDetail != endOfLine) {
-            String potentialWord = item.substring(indexOfDetail, endIndexOfDetail);
-            switch(potentialWord) {
-                case "name":
-                case "price":
-                case "type":
-                case "expiration":
-                    thereIsAValue = false;
-                    break;
-                default:
-                    specificItem = item.substring(indexOfDetail, endIndexOfDetail);
-                    break;
-            }
-        }
-        //there is a value and it is at the end of the line
-        else if(thereIsAValue){
-            specificItem = item.substring(indexOfDetail);
-        }
-        //specific item was not populated
-        if(specificItem.equals("")) {
-            numExceptions++;
-        }
+        String specificItem = endIndexOfDetail != endOfLine ? populateString(item, indexOfDetail, endIndexOfDetail) : item.substring(indexOfDetail);
+        numExceptions = specificItem.equals("") ? numExceptions++ : numExceptions;
         return specificItem;
     }
+
+    private String populateString(String item, int indexOfDetail, int endIndexOfDetail) {
+        String potentialItem = item.substring(indexOfDetail, endIndexOfDetail);
+        switch(potentialItem) {
+            case "name":
+            case "price":
+            case "type":
+            case "expiration":
+                return "";
+            default:
+                return potentialItem;
+        }
+    }
+
 
     public String [] formatStringAndPutIntoLines(String output) {
         output = output.toLowerCase();
@@ -110,36 +103,32 @@ public class ItemParser {
 
 
     public double setPrice(String price) {
-        if(price.equals("")) {
-            return 0.0;
-        }
-        else {
-            return Double.parseDouble(price);
-        }
+        return price.equals("") ? 0.0 : Double.parseDouble(price);
     }
 
     public String endResults() {
         StringBuilder result = new StringBuilder();
         occurrences.forEach((grocery, numTimesOfGrocery) -> {
-            switch(grocery) {
-                case "":
-                    break;
-                default:
-                    grocery = Character.toUpperCase(grocery.charAt(0)) + grocery.substring(1);
-                    result.append(grocery + " occurred " + numTimesOfGrocery + " times.\n");
-                    result.append("==========================\n");
-                    grocery = grocery.toLowerCase();
-                    prices.get(grocery).forEach((groceryPrice, numOccurencesOfPrice) -> {
-                        if(groceryPrice != 0.0) {
-                            result.append("Price: " + groceryPrice + " seen: " + numOccurencesOfPrice + " times.\n");
-                            result.append("--------------------------\n");
-                        }
-                    });
+            if(!grocery.equals("")) {
+                appendResults(grocery, result, numTimesOfGrocery);
             }
             result.append("\n");
         });
         result.append("Number of exceptions is: " + numExceptions);
         return result.toString();
+    }
+
+    private void appendResults(String grocery, StringBuilder result, int numTimesOfGrocery) {
+        grocery = Character.toUpperCase(grocery.charAt(0)) + grocery.substring(1);
+        result.append(grocery + " occurred " + numTimesOfGrocery + " times.\n");
+        result.append("==========================\n");
+        grocery = grocery.toLowerCase();
+        prices.get(grocery).forEach((groceryPrice, numOccurencesOfPrice) -> {
+            if(groceryPrice != 0.0) {
+                result.append("Price: " + groceryPrice + " seen: " + numOccurencesOfPrice + " times.\n");
+                result.append("--------------------------\n");
+            }
+        });
     }
 
     public HashMap<String, TreeMap<Double, Integer>> getPrices() {
