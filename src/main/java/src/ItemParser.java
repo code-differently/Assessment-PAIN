@@ -7,49 +7,32 @@ import java.util.logging.Logger;
 
 public class ItemParser {
 
-    public String readRawDataToString() throws Exception{
-        ClassLoader classLoader = getClass().getClassLoader();
-        String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
-        return result;
-    }
-
     private int numExceptions = 0;
     private TreeMap<String, Integer> occurrences = new TreeMap<>();
     private HashMap<String, TreeMap<Double, Integer>> prices = new HashMap<>();
     private static final Logger myLogger = Logger.getLogger("src.app");
+    private static IndexOfDifferentItems indexes = new IndexOfDifferentItems();
 
     public static void main(String[] args) throws Exception{
         List<Item> listOfItems = new ArrayList<Item>();
-        String name = "name:";
-        String price = "price:";
-        String type = "type:";
-        String expiration = "expiration:";
-
         ItemParser parser = new ItemParser();
-
         String output = parser.readRawDataToString();
-
         String[] linesOfOutput = parser.formatStringAndPutIntoLines(output);
 
         for(String item: linesOfOutput) {
-            int indexOfName = parser.calculateIndex(item, name);
-            int indexOfPrice = parser.calculateIndex(item, price);
-            int indexOfType = parser.calculateIndex(item, type);
-            int indexOfExpiration = parser.calculateIndex(item, expiration);
+            indexes.populateIndexes(item);
 
             ItemDetail detail = new ItemDetail();
-            String potentialName = parser.getSpecificItem(item, indexOfName);
-            //cookies seemed to be the only different word
-            if(potentialName.length() > 0 && potentialName.substring(0, 1).equals("c")) {
-                potentialName = potentialName.replaceAll("0", "o");
-            }
+            String potentialName = parser.getSpecificItem(item, indexes.getIndexOfName());
+            potentialName = parser.replaceMisspellingInCookies(potentialName);
+
             parser.occurrences.merge(potentialName, 1, Integer::sum);
-            
+
             detail.name = potentialName;
-            String priceString = parser.getSpecificItem(item, indexOfPrice);
+            String priceString = parser.getSpecificItem(item, indexes.getIndexOfPrice());
             detail.price = parser.setPrice(priceString);
-            detail.type = parser.getSpecificItem(item, indexOfType);
-            detail.expirationDate = parser.getSpecificItem(item, indexOfExpiration);
+            detail.type = parser.getSpecificItem(item, indexes.getIndexOfType());
+            detail.expirationDate = parser.getSpecificItem(item, indexes.getIndexOfExpiration());
 
             parser.setPriceOccurrenceOfItem(potentialName, detail.price);
 
@@ -58,6 +41,24 @@ public class ItemParser {
         }
 
         myLogger.info(parser.endResults());
+    }
+
+    public String readRawDataToString() throws Exception{
+        ClassLoader classLoader = getClass().getClassLoader();
+        String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
+        return result;
+    }
+
+    private void populateDetail(ItemDetail detail) {
+
+    }
+
+    //cookies seemed to be the only different word
+    private String replaceMisspellingInCookies(String potentialName) {
+        if(potentialName.length() > 0 && potentialName.substring(0, 1).equals("c")) {
+            potentialName = potentialName.replaceAll("0", "o");
+        }
+        return potentialName;
     }
 
     public void setPriceOccurrenceOfItem(String itemName, double price) {
@@ -107,9 +108,6 @@ public class ItemParser {
         return output.split("##");
     }
 
-    public int calculateIndex(String individualLine, String whatToLookFor) {
-        return individualLine.indexOf(whatToLookFor) + whatToLookFor.length();
-    }
 
     public double setPrice(String price) {
         if(price.equals("")) {

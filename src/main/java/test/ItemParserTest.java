@@ -28,17 +28,6 @@ public class ItemParserTest {
     }
 
     @Test
-    public void getSpecificItemParsingError() {
-        String expected = "";
-        String individualLine = "name:bread:price:type:food:expiration:1/02/2016";
-
-        int index = itemParser.calculateIndex(individualLine, "price:");
-        String actual = itemParser.getSpecificItem(individualLine, index);
-
-        Assert.assertEquals(expected, actual);
-    }
-
-    @Test
     public void formatStringAndPutIntoLinesTest() {
         String expectedLineOne = "name:milk:price:3.23:type:food:expiration:1/25/2016";
         String expectedLineTwo = "name:bread:price:1.23:type:food:expiration:1/02/2016";
@@ -50,15 +39,7 @@ public class ItemParserTest {
         Assert.assertEquals(expectedLineTwo, actualLines[1]);
     }
 
-    @Test
-    public void calculateIndexTest() {
-        int expectedIndexOfTheWordFood = 27;
-        String individualLine = "name:bread:price:1.23:type:food:expiration:1/02/2016";
 
-        int actualIndexOfTheWordFood = itemParser.calculateIndex(individualLine, "type:");
-
-        Assert.assertEquals(expectedIndexOfTheWordFood, actualIndexOfTheWordFood);
-    }
 
     @Test
     public void setPriceWithNothingTest() {
